@@ -10,7 +10,7 @@ This template separates **application code** from **content** to enable fast con
 
 ## File Structure
 
-\`\`\`
+```
 app/                    # Next.js application
   page.tsx             # Homepage (post list)
   post/[slug]/         # Dynamic post routes
@@ -21,7 +21,7 @@ lib/
   mdx.ts              # Octokit integration
 content/              # MDX posts (in your GitHub repo)
 vercel-ignore-build.js # Smart build detection
-\`\`\`
+```
 
 ## Two Types of Changes
 
@@ -63,19 +63,19 @@ This prevents wasting build minutes on pure content updates.
 
 Define in `components/mdx-components.tsx`:
 
-\`\`\`tsx
+```tsx
 export function CustomComponent({ children }) {
   return <div className="custom">{children}</div>
 }
-\`\`\`
+```
 
 Use in any MDX file:
 
-\`\`\`mdx
+```mdx
 <CustomComponent>
   Content here
 </CustomComponent>
-\`\`\`
+```
 
 **Important**: Component changes require full deployment since they're application code.
-\`\`\`
+```

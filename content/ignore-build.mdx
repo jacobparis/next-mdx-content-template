@@ -23,7 +23,7 @@ You want:
 
 Vercel runs `vercel-ignore-build.js` before building:
 
-\`\`\`js
+```js
 const execSync = require('child_process').execSync
 
 // Get files changed since last deployment
@@ -48,7 +48,7 @@ if (onlyContentChanged) {
 
 console.log('Code changed, running build')
 process.exit(1) // Build
-\`\`\`
+```
 
 ## Exit Codes
 
@@ -59,11 +59,11 @@ process.exit(1) // Build
 
 Enable in `vercel.json`:
 
-\`\`\`json
+```json
 {
   "ignoreCommand": "node vercel-ignore-build.js"
 }
-\`\`\`
+```
 
 ## Content Workflow
 
@@ -83,4 +83,4 @@ Enable in `vercel.json`:
 5. New application version live
 
 This separation keeps builds fast and cheap while maintaining instant content updates.
-\`\`\`
+```
