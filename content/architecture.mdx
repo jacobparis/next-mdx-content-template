@@ -1,0 +1,81 @@
+---
+title: "Template Architecture"
+date: "2025-01-15"
+description: "How this template is structured and what happens when you make changes"
+---
+
+# Template Architecture
+
+This template separates **application code** from **content** to enable fast content updates without full redeployments.
+
+## File Structure
+
+\`\`\`
+app/                    # Next.js application
+  page.tsx             # Homepage (post list)
+  post/[slug]/         # Dynamic post routes
+  api/revalidate/      # Webhook endpoint
+components/            # React components
+  mdx-components.tsx   # Custom MDX components
+lib/
+  mdx.ts              # Octokit integration
+content/              # MDX posts (in your GitHub repo)
+vercel-ignore-build.js # Smart build detection
+\`\`\`
+
+## Two Types of Changes
+
+### Content Changes (Fast)
+
+**What**: Edit MDX files in `content/`
+
+**What happens**:
+1. Push to GitHub main branch
+2. GitHub webhook fires → `/api/revalidate`
+3. Webhook validates HMAC signature
+4. ISR revalidates affected paths
+5. Next request fetches fresh content from GitHub
+6. **No Vercel build triggered** (via `vercel-ignore-build.js`)
+
+**Speed**: Seconds
+
+### Application Changes (Slow)
+
+**What**: Edit code in `app/`, `components/`, `lib/`
+
+**What happens**:
+1. Push to GitHub
+2. Vercel detects non-content changes
+3. Full build and deployment
+4. New application version deployed
+
+**Speed**: Minutes
+
+## The Ignore Build Script
+
+`vercel-ignore-build.js` checks git diffs:
+- Only `content/` changed? → Exit 0 (skip build)
+- Anything else changed? → Exit 1 (run build)
+
+This prevents wasting build minutes on pure content updates.
+
+## Custom MDX Components
+
+Define in `components/mdx-components.tsx`:
+
+\`\`\`tsx
+export function CustomComponent({ children }) {
+  return <div className="custom">{children}</div>
+}
+\`\`\`
+
+Use in any MDX file:
+
+\`\`\`mdx
+<CustomComponent>
+  Content here
+</CustomComponent>
+\`\`\`
+
+**Important**: Component changes require full deployment since they're application code.
+\`\`\`

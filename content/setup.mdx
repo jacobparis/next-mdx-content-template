@@ -1,0 +1,64 @@
+---
+title: "Initial Setup"
+date: "2025-01-15"
+description: "Configure your MDX blog with GitHub integration and webhooks"
+---
+
+# Initial Setup
+
+This template fetches content directly from your GitHub repository using Octokit. Here's how to configure it.
+
+## Environment Variables
+
+Add these to your Vercel project:
+
+\`\`\`bash
+GITHUB_REPO_OWNER=your-username
+GITHUB_REPO_NAME=your-repo
+GITHUB_TOKEN=ghp_xxxxxxxxxxxx  # Optional
+REVALIDATE_SECRET=your-random-string
+\`\`\`
+
+### GitHub Token (Optional)
+
+The token is only required if:
+- Your repository is private
+- You're hitting GitHub's API rate limit (60 req/hour without auth, 5000 with)
+
+**Generate a Personal Access Token:**
+1. GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)
+2. "Generate new token" with `repo` scope
+3. Copy token immediately (you won't see it again)
+4. Add as `GITHUB_TOKEN` environment variable
+
+## Webhook Configuration
+
+After deploying to Vercel:
+
+1. **Repository → Settings → Webhooks → Add webhook**
+2. **Payload URL**: `https://your-domain.com/api/revalidate`
+3. **Content type**: `application/json`
+4. **Secret**: Same value as `REVALIDATE_SECRET` env var
+5. **Events**: "Just the push event"
+6. **Active**: ✓
+
+The webhook triggers ISR revalidation when you push content changes to the main branch.
+
+## Create Content
+
+Add MDX files to `content/` in your repo:
+
+\`\`\`mdx
+---
+title: "Post Title"
+date: "2025-01-15"
+description: "Brief description"
+---
+
+# Content here
+
+Regular markdown works, plus custom components.
+\`\`\`
+
+Push to main → webhook fires → content updates instantly via ISR.
+\`\`\`

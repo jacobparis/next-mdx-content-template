@@ -114,5 +114,5 @@ Then use in MDX:
 6. **No Redeploy**: Content-only changes don't trigger full Vercel deploys
 \`\`\`
 
-```mdx file="content/hello-world.mdx" isDeleted="true"
+\`\`\`mdx file="content/hello-world.mdx" isDeleted="true"
 ...deleted...

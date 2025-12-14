@@ -1,0 +1,69 @@
+---
+title: "How ISR Works"
+date: "2025-01-15"
+description: "Understanding Incremental Static Regeneration in Next.js"
+---
+
+# Incremental Static Regeneration
+
+ISR lets you update static pages without rebuilding your entire site.
+
+## The Problem
+
+Traditional static generation:
+- Build all pages at deploy time
+- New content requires full rebuild
+- Slow for large sites
+
+Traditional server rendering:
+- Generate pages on every request
+- Slower response times
+- Higher server load
+
+## The Solution: ISR
+
+ISR generates pages statically but regenerates them in the background:
+
+\`\`\`tsx
+export const revalidate = 3600 // 1 hour
+\`\`\`
+
+**How it works**:
+1. First request → Generate and cache page
+2. Subsequent requests → Serve cached version
+3. After revalidate period → Serve stale cache, regenerate in background
+4. Next request → Serve fresh version
+
+This is called **stale-while-revalidate**.
+
+## On-Demand Revalidation
+
+Instead of waiting for the revalidate period:
+
+\`\`\`tsx
+revalidatePath('/post/my-slug')
+\`\`\`
+
+This immediately marks the cache as stale and regenerates on the next request.
+
+## Why It Matters Here
+
+When you push content:
+1. Webhook calls `revalidatePath('/post/changed-slug')`
+2. Next request fetches fresh MDX from GitHub via Octokit
+3. New content appears immediately
+4. No full deployment needed
+
+You get static performance with dynamic freshness.
+
+## generateStaticParams
+
+\`\`\`tsx
+export async function generateStaticParams() {
+  const posts = await getAllPosts()
+  return posts.map(post => ({ slug: post.slug }))
+}
+\`\`\`
+
+Tells Next.js which post slugs to pre-render at build time. Dynamic slugs still work at runtime but aren't pre-generated.
+\`\`\`

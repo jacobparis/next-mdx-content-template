@@ -1,0 +1,86 @@
+---
+title: "Smart Build Detection"
+date: "2025-01-15"
+description: "How the ignore build script prevents unnecessary deployments"
+---
+
+# Vercel Ignore Build Script
+
+The `vercel-ignore-build.js` script prevents full deployments when only content changes.
+
+## The Problem
+
+Default behavior:
+- Any git push triggers Vercel build
+- Builds cost money and time
+- Content-only changes don't need code rebuilds
+
+You want:
+- Code changes → Full deployment
+- Content changes → Skip build, use ISR webhook
+
+## How It Works
+
+Vercel runs `vercel-ignore-build.js` before building:
+
+\`\`\`js
+const execSync = require('child_process').execSync
+
+// Get files changed since last deployment
+const diff = execSync('git diff --name-only HEAD~1 HEAD').toString().trim()
+
+if (!diff) {
+  console.log('No changes detected')
+  process.exit(1) // Build
+}
+
+const changedFiles = diff.split('\n')
+
+// Check if only content files changed
+const onlyContentChanged = changedFiles.every(file => 
+  file.startsWith('content/')
+)
+
+if (onlyContentChanged) {
+  console.log('Only content changed, skipping build')
+  process.exit(0) // Skip
+}
+
+console.log('Code changed, running build')
+process.exit(1) // Build
+\`\`\`
+
+## Exit Codes
+
+- `exit(0)` → Skip build (Vercel uses cached deployment)
+- `exit(1)` → Run build
+
+## Configuration
+
+Enable in `vercel.json`:
+
+\`\`\`json
+{
+  "ignoreCommand": "node vercel-ignore-build.js"
+}
+\`\`\`
+
+## Content Workflow
+
+1. Edit `content/my-post.mdx`
+2. Push to GitHub main
+3. Vercel runs ignore script → exit 0 (skip)
+4. GitHub webhook fires → `/api/revalidate`
+5. ISR updates affected paths
+6. Content live in seconds without full deploy
+
+## Code Workflow
+
+1. Edit `app/page.tsx`
+2. Push to GitHub
+3. Vercel runs ignore script → exit 1 (build)
+4. Full build and deployment
+5. New application version live
+
+This separation keeps builds fast and cheap while maintaining instant content updates.
+\`\`\`
