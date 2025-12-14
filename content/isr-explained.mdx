@@ -24,9 +24,9 @@ Traditional server rendering:
 
 ISR generates pages statically but regenerates them in the background:
 
-\`\`\`tsx
+```tsx
 export const revalidate = 3600 // 1 hour
-\`\`\`
+```
 
 **How it works**:
 1. First request → Generate and cache page
@@ -40,9 +40,9 @@ This is called **stale-while-revalidate**.
 
 Instead of waiting for the revalidate period:
 
-\`\`\`tsx
+```tsx
 revalidatePath('/post/my-slug')
-\`\`\`
+```
 
 This immediately marks the cache as stale and regenerates on the next request.
 
@@ -58,12 +58,12 @@ You get static performance with dynamic freshness.
 
 ## generateStaticParams
 
-\`\`\`tsx
+```tsx
 export async function generateStaticParams() {
   const posts = await getAllPosts()
   return posts.map(post => ({ slug: post.slug }))
 }
-\`\`\`
+```
 
 Tells Next.js which post slugs to pre-render at build time. Dynamic slugs still work at runtime but aren't pre-generated.
-\`\`\`
+```

@@ -12,13 +12,13 @@ Public webhooks are dangerous. Anyone who knows your URL could trigger expensive
 
 Without authentication:
 
-\`\`\`tsx
+```tsx
 // Insecure
 export async function POST() {
   revalidatePath('/') // Anyone can trigger this
   return Response.json({ revalidated: true })
 }
-\`\`\`
+```
 
 An attacker could spam your endpoint, causing:
 - Excessive GitHub API calls
@@ -29,14 +29,14 @@ An attacker could spam your endpoint, causing:
 
 GitHub signs every webhook payload with your secret:
 
-\`\`\`
+```
 X-Hub-Signature-256: sha256=<hmac_hex>
-\`\`\`
+```
 
 The signature is:
-\`\`\`
+```
 HMAC-SHA256(secret, request_body)
-\`\`\`
+```
 
 ## Validation Process
 
@@ -45,7 +45,7 @@ HMAC-SHA256(secret, request_body)
 3. Compare with GitHub's signature
 4. Use timing-safe comparison (prevents timing attacks)
 
-\`\`\`tsx
+```tsx
 const signature = request.headers.get('x-hub-signature-256')
 const body = await request.text()
 const hmac = crypto.createHmac('sha256', secret)
@@ -55,15 +55,15 @@ const digest = `sha256=${hmac.digest('hex')}`
 if (!crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(digest))) {
   return Response.json({ error: 'Invalid signature' }, { status: 401 })
 }
-\`\`\`
+```
 
 ## Why timingSafeEqual?
 
 Regular string comparison leaks timing information:
 
-\`\`\`tsx
+```tsx
 if (signature === digest) // BAD: Timing attack vulnerable
-\`\`\`
+```
 
 Early exit when first character differs → attacker can brute-force character by character by measuring response times.
 
@@ -73,12 +73,12 @@ Early exit when first character differs → attacker can brute-force character b
 
 Only revalidate for main branch:
 
-\`\`\`tsx
+```tsx
 const payload = JSON.parse(body)
 if (payload.ref !== 'refs/heads/main') {
   return Response.json({ message: 'Ignored non-main branch' })
 }
-\`\`\`
+```
 
 Prevents revalidating on every feature branch push.
-\`\`\`
+```
