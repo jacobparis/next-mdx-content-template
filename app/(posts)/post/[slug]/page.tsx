@@ -51,8 +51,3 @@ export default async function PostPage({
     </>
   )
 }
-
-export async function generateStaticParams() {
-  const slugs = await getAllSlugs()
-  return slugs.map((slug) => ({ slug }))
-}

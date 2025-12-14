@@ -11,6 +11,7 @@ export const contentType = "image/png"
 export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
   "use cache"
   const { slug } = await params
+  cacheTag(`post-${slug}`)
   const post = await getPostBySlug(slug)
 
   if (!post) {
