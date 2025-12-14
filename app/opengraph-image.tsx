@@ -1,3 +1,5 @@
+"use cache"
+
 import { ImageResponse } from "next/og"
 import { getAllPosts } from "@/lib/mdx"
 
