@@ -1,4 +1,4 @@
-# Minimal MDX Blog
+# Next MDX Content Site
 
 A hyper-minimal blog built with Next.js, MDX, and Incremental Static Regeneration (ISR). Content is fetched directly from your GitHub repository.
 
@@ -17,7 +17,7 @@ A hyper-minimal blog built with Next.js, MDX, and Incremental Static Regeneratio
 
 Add these to your Vercel project:
 
-```bash
+\`\`\`bash
 # GitHub repository details
 GITHUB_REPO_OWNER=your-github-username
 GITHUB_REPO_NAME=your-repo-name
@@ -25,7 +25,7 @@ GITHUB_TOKEN=your-github-personal-access-token
 
 # Webhook security
 REVALIDATE_SECRET=your-secure-random-string
-```
+\`\`\`
 
 **GitHub Token Setup:**
 1. Go to GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)
@@ -36,7 +36,7 @@ REVALIDATE_SECRET=your-secure-random-string
 
 Create MDX files in the `content/` folder of your repository:
 
-```mdx
+\`\`\`mdx
 ---
 title: "My Post Title"
 date: "2025-01-15"
@@ -50,7 +50,7 @@ Use any markdown or custom components!
 <Callout type="info">
 Custom components work too!
 </Callout>
-```
+\`\`\`
 
 ### 3. Deploy to Vercel
 
@@ -77,21 +77,21 @@ The webhook will verify the HMAC signature (`X-Hub-Signature-256` header) before
 
 Add new components in `components/mdx-components.tsx`:
 
-```typescript
+\`\`\`typescript
 export function MyComponent({ children }: { children: React.ReactNode }) {
   return <div className="custom-style">{children}</div>
 }
-```
+\`\`\`
 
 Then use in MDX:
 
-```mdx
+\`\`\`mdx
 <MyComponent>Content here</MyComponent>
-```
+\`\`\`
 
 ## File Structure
 
-```
+\`\`\`
 ├── app/
 │   ├── page.tsx              # Homepage (post list)
 │   ├── post/[slug]/page.tsx  # Individual post pages
@@ -102,7 +102,7 @@ Then use in MDX:
 ├── lib/
 │   └── mdx.ts               # MDX utilities with Octokit integration
 └── vercel.json              # Deployment config
-```
+\`\`\`
 
 ## How It Works
 
@@ -112,7 +112,3 @@ Then use in MDX:
 4. **Webhook**: When you push content changes, GitHub triggers the webhook
 5. **Revalidation**: The webhook verifies the HMAC signature and triggers ISR to fetch fresh content
 6. **No Redeploy**: Content-only changes don't trigger full Vercel deploys
-```
-
-```mdx file="content/hello-world.mdx" isDeleted="true"
-...deleted...

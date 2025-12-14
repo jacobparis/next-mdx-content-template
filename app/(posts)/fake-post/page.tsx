@@ -19,63 +19,70 @@ export default function FakePostPage() {
 
   return (
     <>
-      <PostHeader title="Getting Started with MDX Blog" date={new Date().toISOString()} />
+      <PostHeader title="v0 Development Preview" date={new Date().toISOString()} />
 
       <div className="prose-custom">
         {p({
           children:
-            "Welcome to your new MDX blog! This template uses Incremental Static Regeneration (ISR) to keep content fresh without rebuilding your entire site.",
+            "You're viewing a placeholder post because MDXRemote doesn't work in the v0 preview environment. This demonstrates the blog's design and functionality during development.",
         })}
 
-        {h2({ children: "Key Features" })}
+        {h2({ children: "Why This Placeholder?" })}
+
+        {p({
+          children:
+            "This blog fetches content from GitHub using Octokit and renders it with MDXRemote. While this works perfectly in production, the v0 preview environment can't execute MDXRemote's server-side MDX compilation.",
+        })}
+
+        {p({
+          children:
+            "Instead, this page uses hardcoded JSX with the same MDX components to show you exactly how your blog will look and feel when deployed.",
+        })}
+
+        {h2({ children: "What You're Seeing" })}
 
         {ul({
           children: [
-            li({
-              children: [
-                "Write content in MDX format with full React component support. ",
-                a({ href: "https://mdxjs.com/", children: "Learn more about MDX" }),
-              ],
-            }),
-            li({
-              children: [
-                "Automatic revalidation via GitHub webhooks. ",
-                a({ href: "https://docs.github.com/en/webhooks", children: "Learn more about GitHub webhooks" }),
-              ],
-            }),
-            li({ children: "Smart build optimization that skips deploys for content-only changes" }),
-            li({ children: "Custom MDX components like Callout and ImageGrid" }),
+            li({ children: "The actual design system with typography, colors, and spacing" }),
+            li({ children: "Custom MDX components like callouts and code blocks" }),
+            li({ children: "Social share links and next post navigation" }),
+            li({ children: "The complete post layout including breadcrumbs" }),
           ],
         })}
 
-        {h3({ children: "Using Custom Components" })}
-
-        {p({ children: "You can use custom components in your MDX files. Here's an example of a callout:" })}
+        {h3({ children: "Custom Components Work" })}
 
         <Callout type="info">
           {p({
             children:
-              "This is a callout component! It's perfect for highlighting important information in your blog posts.",
+              "Custom components like this callout will work identically in your real posts. Add them to your MDX files and they'll render with the same styling.",
           })}
         </Callout>
 
-        {h3({ children: "Code Blocks" })}
+        {h3({ children: "Code Blocks Too" })}
 
-        {p({ children: "Code syntax is fully supported with proper styling:" })}
+        {p({ children: "Syntax highlighting and copy buttons work as expected:" })}
 
         {pre({
           children: code({
-            children: `export function greet(name: string) {
-  return \`Hello, \${name}!\`
+            children: `// Your actual blog posts will render code like this
+export async function getBlogPosts() {
+  const posts = await octokit.getContent('content/')
+  return posts.map(post => compileMDX(post))
 }`,
           }),
         })}
 
-        {p({ children: "Add your content to the GitHub repository and watch it automatically sync to your blog!" })}
+        {p({
+          children: [
+            "Deploy this blog to see real content from your GitHub repository. ",
+            a({ href: "https://github.com", children: "Learn more about setup" }),
+          ],
+        })}
       </div>
 
       <div className="flex gap-x-4 mt-12">
-        <SocialShare title="Getting Started with MDX Blog" slug="fake-post" />
+        <SocialShare title="v0 Development Preview" slug="fake-post" />
         <NextPost post={mockNextPost} />
       </div>
     </>
