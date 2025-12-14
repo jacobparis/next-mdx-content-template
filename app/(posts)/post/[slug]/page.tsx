@@ -5,12 +5,13 @@ import { PostHeader } from "@/components/post-header"
 import { SocialShare } from "@/components/social-share"
 import { NextPost } from "@/components/next-post"
 import type { Metadata } from "next"
-import { cacheTag } from "next/cache"
+import { cacheTag, cacheLife } from "next/cache"
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   "use cache"
   const { slug } = await params
   cacheTag(`post-${slug}`)
+  cacheLife('max')
   const post = await getPostBySlug(slug)
 
   if (!post) {
@@ -31,6 +32,7 @@ export default async function PostPage({
   "use cache"
   const { slug } = await params
   cacheTag(`post-${slug}`)
+  cacheLife('max')
 
   const post = await getPostBySlug(slug)
 
