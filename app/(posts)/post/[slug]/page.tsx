@@ -1,12 +1,16 @@
 import { notFound } from "next/navigation"
-import { getPostBySlug, getNextPost } from "@/lib/mdx"
+import { getPostBySlug, getNextPost, getAllSlugs } from "@/lib/mdx"
 import { Markdown } from "@/components/markdown"
 import { PostHeader } from "@/components/post-header"
 import { SocialShare } from "@/components/social-share"
 import { NextPost } from "@/components/next-post"
 
-// Revalidate every hour
 export const revalidate = 3600
+
+export async function generateStaticParams() {
+  const slugs = await getAllSlugs()
+  return slugs.map((slug) => ({ slug }))
+}
 
 export default async function PostPage({
   params,
