@@ -4,6 +4,7 @@ import { SocialShare } from "@/components/social-share"
 import { NextPost } from "@/components/next-post"
 
 export default async function FakePostPage() {
+  "use cache"
   const { a, h2, h3, p, ul, li, code, pre } = MdxComponents
 
   const mockNextPost = {
