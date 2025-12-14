@@ -1,12 +1,9 @@
-"use cache"
-
 import { MdxComponents, Callout } from "@/components/mdx-components"
 import { PostHeader } from "@/components/post-header"
 import { SocialShare } from "@/components/social-share"
 import { NextPost } from "@/components/next-post"
 
-
-export default function FakePostPage() {
+export default async function FakePostPage() {
   const { a, h2, h3, p, ul, li, code, pre } = MdxComponents
 
   const mockNextPost = {
