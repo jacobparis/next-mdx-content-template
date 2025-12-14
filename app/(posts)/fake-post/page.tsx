@@ -3,6 +3,9 @@ import { PostHeader } from "@/components/post-header"
 import { SocialShare } from "@/components/social-share"
 import { NextPost } from "@/components/next-post"
 
+export const dynamic = "force-static"
+export const revalidate = false
+
 export default function FakePostPage() {
   const { a, h2, h3, p, ul, li, code, pre } = MdxComponents
 
@@ -72,8 +75,8 @@ export default function FakePostPage() {
       </div>
 
       <div className="flex gap-x-4 mt-12">
-      <SocialShare title="Getting Started with MDX Blog" slug="fake-post" />
-      <NextPost post={mockNextPost} />
+        <SocialShare title="Getting Started with MDX Blog" slug="fake-post" />
+        <NextPost post={mockNextPost} />
       </div>
     </>
   )
