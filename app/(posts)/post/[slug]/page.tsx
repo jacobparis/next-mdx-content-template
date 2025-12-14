@@ -1,5 +1,3 @@
-"use cache"
-
 import { notFound } from "next/navigation"
 import { getPostBySlug, getNextPost, getAllSlugs } from "@/lib/mdx"
 import { Markdown } from "@/components/markdown"
@@ -27,6 +25,7 @@ export default async function PostPage({
 }: {
   params: Promise<{ slug: string }>
 }) {
+
   const { slug } = await params
   const post = await getPostBySlug(slug)
 
