@@ -8,7 +8,7 @@ export default async function HomePage() {
   const posts = await getAllPosts()
 
   return (
-    <div className="min-h-screen">
+    <div>
       <header className="border-b border-border/50">
         <div className="max-w-4xl mx-auto px-6 py-4">
           <div className="flex items-center gap-3 text-xl">
@@ -26,10 +26,17 @@ export default async function HomePage() {
           {posts.map((post) => (
             <article key={post.slug} className="group">
               <Link href={`/post/${post.slug}`} className="block">
-                <h2 className="text-3xl font-bold mb-3 group-hover:opacity-70 transition-opacity text-balance leading-tight">
+                <h2 className="mt-3 group-hover:opacity-70 transition-opacity text-balance leading-tight font-semibold text-2xl">
                   {post.title}
                 </h2>
-                <p className="text-base text-muted-foreground text-pretty leading-relaxed">{post.description}</p>
+                <time className="text-sm text-muted-foreground block mt-0">
+                  {new Date(post.date).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </time>
+                <p className="text-base text-muted-foreground text-pretty leading-relaxed mt-2">{post.description}</p>
               </Link>
             </article>
           ))}

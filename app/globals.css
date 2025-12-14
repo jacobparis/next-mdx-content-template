@@ -141,20 +141,20 @@
 
 /* Reduced all heading sizes and spacing */
 .prose :where(h1):not(:where([class~="not-prose"] *)) {
-  @apply text-4xl font-bold tracking-tight mb-4 mt-8 text-balance;
+  @apply text-4xl font-bold tracking-tight mt-8 text-balance;
 }
 
 .prose :where(h2):not(:where([class~="not-prose"] *)) {
-  @apply text-2xl font-bold tracking-tight mb-3 mt-8;
+  @apply text-2xl font-bold tracking-tight mt-8;
 }
 
 .prose :where(h3):not(:where([class~="not-prose"] *)) {
-  @apply text-xl font-bold tracking-tight mb-2 mt-6;
+  @apply text-xl font-bold tracking-tight mt-6;
 }
 
 /* Reduced paragraph font size and spacing */
 .prose :where(p):not(:where([class~="not-prose"] *)) {
-  @apply mb-4 text-base text-pretty;
+  @apply mt-4 text-base text-pretty;
 }
 
 .prose :where(strong):not(:where([class~="not-prose"] *)) {
@@ -178,11 +178,11 @@
 }
 
 .prose :where(ul):not(:where([class~="not-prose"] *)) {
-  @apply list-disc pl-6 mb-6 space-y-2;
+  @apply list-disc pl-6 mt-6 space-y-2;
 }
 
 .prose :where(ol):not(:where([class~="not-prose"] *)) {
-  @apply list-decimal pl-6 mb-6 space-y-2;
+  @apply list-decimal pl-6 mt-6 space-y-2;
 }
 
 /* Reduced list item font size */

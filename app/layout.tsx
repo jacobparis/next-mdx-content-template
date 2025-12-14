@@ -20,8 +20,32 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`font-sans antialiased`}>
-        {children}
+      <body className={`font-sans antialiased flex flex-col min-h-screen`}>
+        <div className="flex-1">{children}</div>
+        <footer className="border-t border-border/50 mt-16">
+          <div className="max-w-4xl mx-auto px-6 text-center py-3">
+            <p className="text-sm text-muted-foreground">
+              Built by{" "}
+              <a
+                href="https://x.com/jacobmparis"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent hover:underline"
+              >
+                @jacobmparis
+              </a>{" "}
+              in{" "}
+              <a
+                href="https://v0.app/ref/N52E9N"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent hover:underline"
+              >
+                v0
+              </a>
+            </p>
+          </div>
+        </footer>
         <Analytics />
       </body>
     </html>

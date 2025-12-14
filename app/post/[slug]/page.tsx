@@ -19,7 +19,7 @@ export default async function PostPage({
   }
 
   return (
-    <div className="min-h-screen">
+    <div>
       <header className="border-b border-border/50">
         <div className="max-w-4xl mx-auto px-6 py-4">
           <div className="flex items-center gap-3 text-xl">
@@ -33,9 +33,24 @@ export default async function PostPage({
       </header>
 
       <article className="max-w-4xl mx-auto px-6 py-8">
-        <header className="mb-8">
-          <h1 className="text-4xl font-bold mb-3 text-balance leading-tight">{post.title}</h1>
-          <p className="text-lg text-muted-foreground text-pretty leading-relaxed">{post.description}</p>
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <span>←</span>
+          <span>Back to all posts</span>
+        </Link>
+
+        <header className="mt-8">
+          <h1 className="mt-3 text-balance leading-tight font-medium text-2xl">{post.title}</h1>
+          <time className="text-sm text-muted-foreground block mt-0">
+            {new Date(post.date).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </time>
+          <p className="text-lg text-muted-foreground leading-relaxed mt-2">{post.description}</p>
         </header>
 
         <Markdown source={post.content} />
