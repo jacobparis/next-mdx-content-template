@@ -1,0 +1,86 @@
+---
+title: "How Cache Components Work"
+date: "2025-12-12"
+description: "Understanding Cache Components in Next.js"
+---
+
+Cache components let you update pages without rebuilding your entire site using selective cache invalidation.
+
+## The Problem
+
+Traditional static generation:
+- Build all pages at deploy time
+- New content requires full rebuild
+- Slow for large sites
+
+Traditional server rendering:
+- Generate pages on every request
+- Slower response times
+- Higher server load
+
+## The Solution: Cache Components
+
+Cache components use the `"use cache"` directive to cache function results with tags:
+
+```tsx
+export default async function PostPage({ params }) {
+  "use cache"
+  const { slug } = await params
+  cacheTag(`post-${slug}`)
+  cacheLife("max")
+  
+  const post = await getPostBySlug(slug)
+  // ... render post
+}
+```
+
+**How it works**:
+1. First request → Execute function, cache result with tag
+2. Subsequent requests → Serve cached version
+3. Cache persists until tag is invalidated
+4. Tag invalidation → Next request regenerates fresh content
+
+This gives you **static performance with on-demand freshness**.
+
+## Cache Tags
+
+Each cached function can have one or more tags:
+
+```tsx
+"use cache"
+cacheTag(`post-${slug}`)  // Tag this specific post
+cacheTag("posts-index")   // Tag the post list
+```
+
+Tags let you invalidate specific cached content without affecting others.
+
+## On-Demand Revalidation
+
+When content changes, revalidate specific tags:
+
+```tsx
+revalidateTag(`post-${slug}`, "max")
+revalidateTag("posts-index", "max")
+```
+
+This immediately invalidates the cache and regenerates on the next request.
+
+## Why It Matters Here
+
+When you push content:
+1. Webhook calls `revalidateTag('post-changed-slug', 'max')`
+2. Next request fetches fresh MDX from GitHub via Octokit
+3. New content appears immediately
+4. No full deployment needed
+
+You get static performance with dynamic freshness, and only the changed content is regenerated.
+
+## Cache Life
+
+The `cacheLife()` function controls how long the cache persists:
+
+```tsx
+cacheLife("max")  // Cache indefinitely until tag invalidation
+```
+
+This is perfect for content that only changes when explicitly revalidated via webhook.

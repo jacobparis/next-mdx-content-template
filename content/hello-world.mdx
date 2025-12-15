@@ -1,12 +1,12 @@
 ---
 title: "Hello World"
 date: "2025-01-15"
-description: "Welcome to my minimal blog built with Next.js, MDX, and ISR."
+description: "Welcome to my minimal blog built with Next.js, MDX, and cache components."
 ---
 
-Welcome to my blog! This is a hyper-minimal blog built with **Next.js**, **MDX**, and **Incremental Static Regeneration**.
+Welcome to my blog! This is a hyper-minimal blog built with **Next.js**, **MDX**, and **cache components**.
 
-When you update the MDX content, Vercel does not trigger a rebuild. Instead, GitHub sends a webhook to /api/revalidate to let the app know which posts were created, deleted, or modified. These are then revalidated so users see the fresh content without a redeploy.
+When you update the MDX content, Vercel does not trigger a rebuild. Instead, GitHub sends a webhook to /api/revalidate to let the app know which posts were created, deleted, or modified. The webhook revalidates specific cache tags so users see the fresh content without a redeploy.
 
 ## Features
 
@@ -14,7 +14,8 @@ This blog includes:
 
 - Clean, readable typography
 - MDX support for rich content
-- ISR for automatic updates
+- Cache components for selective revalidation
+- Navigable component for smart prefetching
 - Custom components
 
 <Callout type="info">

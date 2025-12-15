@@ -29,7 +29,7 @@ function getSlugFromPath(path: string): string | null {
   return match ? match[1] : null
 }
 
-// Webhook endpoint to trigger ISR revalidation
+// Webhook endpoint to trigger cache tag revalidation
 export async function POST(request: NextRequest) {
   const secret = process.env.REVALIDATE_SECRET
 

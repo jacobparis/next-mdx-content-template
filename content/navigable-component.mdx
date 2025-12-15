@@ -1,0 +1,66 @@
+---
+title: "The Navigable Component"
+date: "2025-12-12"
+description: "Smart prefetching for instant navigation"
+---
+
+The `Navigable` component provides smart prefetching to make navigation feel instant.
+
+## The Problem
+
+Default Next.js prefetching prefetches all visible links, wasting bandwidth. You want prefetching only on hover or viewport entry.
+
+## Why Not Just Wrap Everything in a Link?
+
+Wrapping the whole card in a link makes the entire card one link for screen readers and creates invalid HTML (nested interactive elements). An absolute overlay blocks interactions with inner elements.
+
+## The Core Solution
+
+Regular link inside for accessibility, `onClick` on card for mouse users:
+
+```tsx
+<article onClick={() => router.push(`/post/${post.slug}`)}>
+	<Link href={`/post/${post.slug}`}>
+		<h2>{post.title}</h2>
+	</Link>
+	<button
+		onClick={(e) => {
+			e.stopPropagation()
+			handleShare()
+		}}
+	>
+		Share
+	</button>
+</article>
+```
+
+Solves accessibility and UX, but doesn't optimize prefetching.
+
+## The Solution: Navigable
+
+Builds on the core solution with smart prefetching:
+
+```tsx
+<Navigable.Root href={`/post/${post.slug}`} asChild>
+	<article>
+		<Navigable.Link>
+			<h2>{post.title}</h2>
+		</Navigable.Link>
+		<button onClick={handleShare}>Share</button>
+	</article>
+</Navigable.Root>
+```
+
+Same accessibility/UX benefits, plus prefetches only on hover or viewport entry.
+
+## Prefetch Modes
+
+**Hover** (default): Prefetches when user hovers over the link.
+
+**Viewport**: Prefetches when link enters viewport (useful for long lists).
+
+## How It Works
+
+`NavigableRoot` manages prefetch state. On hover/viewport entry, it sets `shouldPrefetch` to `true`. `NavigableLink` reads this and enables Next.js prefetching. Click → instant navigation.
+
+Use `asChild` to make the root element clickable while only the link prefetches.

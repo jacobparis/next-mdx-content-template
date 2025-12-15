@@ -15,7 +15,7 @@ Default behavior:
 
 You want:
 - Code changes → Full deployment
-- Content changes → Skip build, use ISR webhook
+- Content changes → Skip build, use cache component webhook
 
 ## How It Works
 
@@ -69,7 +69,7 @@ Enable in `vercel.json`:
 2. Push to GitHub main
 3. Vercel runs ignore script → exit 0 (skip)
 4. GitHub webhook fires → `/api/revalidate`
-5. ISR updates affected paths
+5. Cache tags are revalidated (`revalidateTag('post-slug', 'max')`)
 6. Content live in seconds without full deploy
 
 ## Code Workflow

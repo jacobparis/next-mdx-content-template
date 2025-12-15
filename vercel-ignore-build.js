@@ -16,7 +16,7 @@ try {
 
   if (onlyContentChanged && changedFiles.length > 0) {
     console.log("[v0] Only content files changed, skipping build")
-    console.log("[v0] ISR webhook should handle revalidation")
+    console.log("[v0] Cache component webhook should handle revalidation")
     process.exit(0) // Exit 0 = skip build
   }
 
