@@ -1,0 +1,46 @@
+---
+title: "Content Revalidation Process"
+date: "2025-12-14"
+description: "How the webhook-driven revalidation system keeps your content fresh"
+---
+
+When content changes, the server and users need to receive it. Most serious content sites will use a database or CMS to store content, which requires extra infrastructure but allows getting content out to users immediately.
+
+Requiring full deployments to update content doesn't scale:
+
+- **Slow**: Deployments take minutes, blocking content updates
+- **Expensive**: Every typo fix triggers a full build
+- **Inefficient**: Rebuilds entire site for single post changes
+- **Bottleneck**: Content writers wait on CI/CD pipelines
+
+Selective cache revalidation solves this: only changed content regenerates, updates appear in seconds, and no deployments needed for content-only changes.
+
+## The Process
+
+```
+Push to main → Webhook fires → Parse changes → Revalidate tags → Pre-warm pages
+```
+
+**Step 1**: GitHub webhook fires on main branch pushes with commit data.
+
+**Step 2**: Webhook identifies changed content files:
+
+- Added/Removed → Revalidate index
+- Added/Modified → Revalidate specific post
+
+**Step 3**: Calls `revalidateTag()` to mark cache stale. Next request fetches fresh content.
+
+**Step 4**: Pre-warms pages in background via `after()`. Fires GET requests to revalidated URLs so pages are ready before visitors arrive.
+
+**Step 5**: Returns success response.
+
+## Example
+
+Edit `content/hello-world.mdx` and push:
+
+1. Webhook detects modification
+2. Revalidates `post-hello-world` tag
+3. Background: Fetches `/post/hello-world` to regenerate
+4. Next visitor gets updated content instantly
+
+Result: Static performance with dynamic freshness.
