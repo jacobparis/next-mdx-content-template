@@ -1,6 +1,6 @@
 import matter from "gray-matter"
 import { Octokit } from "@octokit/rest"
-import { cacheTag } from "next/cache"
+import { cacheLife, cacheTag } from "next/cache"
 
 if (!process.env.GITHUB_REPO_OWNER) {
 	throw new Error("GITHUB_REPO_OWNER environment variable is required")
@@ -21,9 +21,11 @@ const branch = "main"
 
 export interface PostMetadata {
 	title: string
-	date: string
+	timestamp: string
 	description: string
 	slug: string
+	tags?: string
+	published?: boolean
 }
 
 export interface Post extends PostMetadata {
@@ -73,6 +75,7 @@ async function getFileContent(path: string): Promise<string> {
 export async function getFirstPostSlug(): Promise<string | null> {
 	"use cache"
 	cacheTag("posts-index")
+	cacheLife("max")
 
 	const files = await getContentFiles()
 
@@ -86,6 +89,7 @@ export async function getFirstPostSlug(): Promise<string | null> {
 export async function getAllPosts(): Promise<PostMetadata[]> {
 	"use cache"
 	cacheTag("posts-index")
+	cacheLife("max")
 
 	const files = await getContentFiles()
 
@@ -96,19 +100,28 @@ export async function getAllPosts(): Promise<PostMetadata[]> {
 
 			return {
 				title: data.title,
-				date: data.date,
+				timestamp: data.timestamp,
 				description: data.description,
 				slug: filenameToSlug(file.name),
+				tags: data.tags,
+				published: data.published,
 			} as PostMetadata
 		}),
 	)
 
-	return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+	return posts
+		.filter((post) => post.published !== false)
+		.sort((a, b) => {
+			const dateA = a.timestamp ? new Date(a.timestamp).getTime() : 0
+			const dateB = b.timestamp ? new Date(b.timestamp).getTime() : 0
+			return dateB - dateA
+		})
 }
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {
 	"use cache"
 	cacheTag(`post-${slug}`)
+	cacheLife("max")
 
 	try {
 		const filePath = slugToFilename(slug)
@@ -117,21 +130,16 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
 
 		return {
 			title: data.title,
-			date: data.date,
+			timestamp: data.timestamp,
 			description: data.description,
 			slug,
+			tags: data.tags,
+			published: data.published,
 			content,
 		}
 	} catch {
 		return null
 	}
-}
-
-export async function getAllSlugs(): Promise<string[]> {
-	"use cache"
-	cacheTag("posts-index")
-	const files = await getContentFiles()
-	return files.map((file) => filenameToSlug(file.name))
 }
 
 export async function getNextPost(currentSlug: string): Promise<PostMetadata | null> {
