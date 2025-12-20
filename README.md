@@ -17,17 +17,21 @@ A hyper-minimal blog built with Next.js, MDX, and cache components. Content is f
 
 Add these to your Vercel project:
 
-\`\`\`bash
+```bash
+
 # GitHub repository details
+
 GITHUB_REPO_OWNER=your-github-username
 GITHUB_REPO_NAME=your-repo-name
 GITHUB_TOKEN=your-github-personal-access-token
 
 # Webhook security
+
 REVALIDATE_SECRET=your-secure-random-string
-\`\`\`
+```
 
 **GitHub Token Setup:**
+
 1. Go to GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)
 2. Generate new token with `repo` scope (read access to repository contents)
 3. Copy the token and add it as `GITHUB_TOKEN` environment variable
@@ -36,11 +40,12 @@ REVALIDATE_SECRET=your-secure-random-string
 
 Create MDX files in the `content/` folder of your repository:
 
-\`\`\`mdx
----
+## ```mdx
+
 title: "My Post Title"
-date: "2025-01-15"
+timestamp: "2025-01-15"
 description: "A brief description"
+
 ---
 
 # Your content here
@@ -50,11 +55,12 @@ Use any markdown or custom components!
 <Callout type="info">
 Custom components work too!
 </Callout>
-\`\`\`
+```
 
 ### 3. Deploy to Vercel
 
 The project is configured to:
+
 - Skip full deploys when only content changes
 - Use cache components with selective revalidation
 - Trigger revalidation via webhook with HMAC verification
@@ -77,32 +83,32 @@ The webhook will verify the HMAC signature (`X-Hub-Signature-256` header) before
 
 Add new components in `components/mdx-components.tsx`:
 
-\`\`\`typescript
+```typescript
 export function MyComponent({ children }: { children: React.ReactNode }) {
-  return <div className="custom-style">{children}</div>
+return <div className="custom-style">{children}</div>
 }
-\`\`\`
+```
 
 Then use in MDX:
 
-\`\`\`mdx
+```mdx
 <MyComponent>Content here</MyComponent>
-\`\`\`
+```
 
 ## File Structure
 
-\`\`\`
+```
 ├── app/
-│   ├── page.tsx              # Homepage (post list)
-│   ├── post/[slug]/page.tsx  # Individual post pages
-│   └── api/revalidate/       # Webhook endpoint
+│ ├── page.tsx # Homepage (post list)
+│ ├── post/[slug]/page.tsx # Individual post pages
+│ └── api/revalidate/ # Webhook endpoint
 ├── components/
-│   └── mdx-components.tsx    # Custom MDX components
-├── content/                  # Your MDX blog posts (in GitHub repo)
+│ └── mdx-components.tsx # Custom MDX components
+├── content/ # Your MDX blog posts (in GitHub repo)
 ├── lib/
-│   └── mdx.ts               # MDX utilities with Octokit integration
-└── vercel.json              # Deployment config
-\`\`\`
+│ └── mdx.ts # MDX utilities with Octokit integration
+└── vercel.json # Deployment config
+```
 
 ## How It Works
 

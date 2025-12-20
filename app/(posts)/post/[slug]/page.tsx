@@ -53,7 +53,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
 	return (
 		<>
-			<PostHeader title={post.title} date={post.date} />
+			<PostHeader title={post.title} timestamp={post.timestamp} />
 			<Markdown source={post.content} />
 			<div className="flex gap-x-4 mt-12">
 				<SocialShare title={post.title} slug={slug} />

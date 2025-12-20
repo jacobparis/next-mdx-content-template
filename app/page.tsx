@@ -35,7 +35,7 @@ export default async function HomePage() {
 									</h2>
 								</Navigable.Link>
 								<time className="text-sm text-muted-foreground block mt-0">
-									{new Date(post.date).toLocaleDateString("en-US", {
+									{new Date(post.timestamp).toLocaleDateString("en-US", {
 										year: "numeric",
 										month: "long",
 										day: "numeric",
